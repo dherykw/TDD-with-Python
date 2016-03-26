@@ -1,8 +1,9 @@
 import unittest
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 
 
-class NewVisitorTest(unittest.TestCase):
+class TestNewVisitor(unittest.TestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
@@ -17,15 +18,26 @@ class NewVisitorTest(unittest.TestCase):
 
         # El usuario nota que el título es nuestra to do list
         self.assertIn('To-Do', self.browser.title)
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('To-Do', header_text)
+
 
         # Es invitado a insertar un to do en la lista
-
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertEqual(inputbox.get_attribute('placeholder'), 'Enter a to-do item')
 
         # Escribe "Comprar papel higienico en la lista"
-
+        inputbox.send_keys('omprar papel higienico')
 
         # Cuando pulsa enter la página se actualiza y pone:
         # 1. Comprar papel higienico en la lista
+        inputbox.send_keys(Keys.ENTER)
+
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_element_by_tag_name('tr')
+        self.assertTrue(any(row.text == '1. Comprar papel higienico' for row in rows ))
+
+
 
         # Sigue apareciendo un texbox que invita a añadir otra tarea
         # El usuario introduce otra tarea
@@ -38,7 +50,9 @@ class NewVisitorTest(unittest.TestCase):
 
         # Visita esa url y comprueba que su to-do list está aun ahí
 
-        # Satidfecho abandona la página y se va a dormir
+        # Satisfecho abandona la página y se va a dormir
 
-if __name__ == '__name__':
+        self.fail('Fin de test')
+
+if __name__ == '__main__':
     unittest.main(warnings='ignore')
