@@ -12,7 +12,6 @@ class TestNewVisitor(unittest.TestCase):
         self.browser.quit()
 
     def test_start_a_new_todo_list(self):
-
         # El usuatio ha odio de nuestra genial aplicación y entra
         self.browser.get('http://localhost:8000')
 
@@ -20,7 +19,6 @@ class TestNewVisitor(unittest.TestCase):
         self.assertIn('To-Do', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
         self.assertIn('To-Do', header_text)
-
 
         # Es invitado a insertar un to do en la lista
         inputbox = self.browser.find_element_by_id('id_new_item')
@@ -34,15 +32,22 @@ class TestNewVisitor(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
 
         table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_element_by_tag_name('tr')
-        self.assertTrue(any(row.text == '1. Comprar papel higienico' for row in rows ))
-
-
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('1. Comprar papel higienico', [row.text for row in rows])
 
         # Sigue apareciendo un texbox que invita a añadir otra tarea
         # El usuario introduce otra tarea
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Comprar champú')
+        inputbox.send_keys(Keys.ENTER)
 
         # La página se vuelve a actualizar y ahora muestra las dos tareas
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('2. Comprar champú', [row.text for row in rows])
+
+
+
 
         # El usuario se pregunta si el sitio recordará su lista, entonces ve
         # que el sitio genera una url unica para ella
@@ -53,6 +58,7 @@ class TestNewVisitor(unittest.TestCase):
         # Satisfecho abandona la página y se va a dormir
 
         self.fail('Fin de test')
+
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
