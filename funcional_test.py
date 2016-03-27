@@ -11,6 +11,12 @@ class TestNewVisitor(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
+
+
     def test_start_a_new_todo_list(self):
         # El usuatio ha odio de nuestra genial aplicación y entra
         self.browser.get('http://localhost:8000')
@@ -31,9 +37,7 @@ class TestNewVisitor(unittest.TestCase):
         # 1. Comprar papel higienico en la lista
         inputbox.send_keys(Keys.ENTER)
 
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1. Comprar papel higienico', [row.text for row in rows])
+        self.check_for_row_in_list_table('1. Comprar papel higienico')
 
         # Sigue apareciendo un texbox que invita a añadir otra tarea
         # El usuario introduce otra tarea
@@ -42,12 +46,8 @@ class TestNewVisitor(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
 
         # La página se vuelve a actualizar y ahora muestra las dos tareas
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('2. Comprar champú', [row.text for row in rows])
-
-
-
+        self.check_for_row_in_list_table('1. Comprar papel higienico')
+        self.check_for_row_in_list_table('2. Comprar champú')
 
         # El usuario se pregunta si el sitio recordará su lista, entonces ve
         # que el sitio genera una url unica para ella
