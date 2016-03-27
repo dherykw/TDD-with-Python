@@ -27,7 +27,7 @@ class TestNewVisitor(unittest.TestCase):
         self.assertEqual(inputbox.get_attribute('placeholder'), 'Enter a to-do item')
 
         # Escribe "Comprar papel higienico en la lista"
-        inputbox.send_keys('omprar papel higienico')
+        inputbox.send_keys('Comprar papel higienico')
 
         # Cuando pulsa enter la página se actualiza y pone:
         # 1. Comprar papel higienico en la lista
