@@ -1,9 +1,10 @@
-import unittest
+from django.test import LiveServerTestCase
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 
-class TestNewVisitor(unittest.TestCase):
+class TestNewVisitor(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
@@ -16,10 +17,9 @@ class TestNewVisitor(unittest.TestCase):
         rows = table.find_elements_by_tag_name('tr')
         self.assertIn(row_text, [row.text for row in rows])
 
-
     def test_start_a_new_todo_list(self):
         # El usuatio ha odio de nuestra genial aplicación y entra
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # El usuario nota que el título es nuestra to do list
         self.assertIn('To-Do', self.browser.title)
@@ -58,7 +58,3 @@ class TestNewVisitor(unittest.TestCase):
         # Satisfecho abandona la página y se va a dormir
 
         self.fail('Fin de test')
-
-
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
