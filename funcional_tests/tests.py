@@ -39,7 +39,7 @@ class TestNewVisitor(LiveServerTestCase):
         # 1. Comprar papel higienico en la lista
         inputbox.send_keys(Keys.ENTER)
         user_list_url = self.browser.current_url
-        self.assertRegex(user_list_url, '/list/.+')
+        self.assertRegex(user_list_url, '/lists/.+')
         self.check_for_row_in_list_table('1. Comprar papel higienico')
 
         # Sigue apareciendo un texbox que invita a añadir otra tarea
@@ -72,7 +72,7 @@ class TestNewVisitor(LiveServerTestCase):
 
         # Pepe obtine su url unica
         pepe_list_url = self.browser.current_url
-        self.assertRegex(user_list_url, '/list/.+')
+        self.assertRegex(user_list_url, '/lists/.+')
         self.assertNotEqual(pepe_list_url, user_list_url)
 
         # De nuevo no hay rastro de la lista del primer Usuario
