@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.test import LiveServerTestCase
 
 from selenium import webdriver
@@ -18,7 +19,7 @@ class TestNewVisitor(LiveServerTestCase):
         self.assertIn(row_text, [row.text for row in rows])
 
     def test_start_a_new_todo_list(self):
-        # El usuatio ha odio de nuestra genial aplicación y entra
+        # El usuario ha odio de nuestra genial aplicación y entra
         self.browser.get(self.live_server_url)
 
         # El usuario nota que el título es nuestra to do list
@@ -33,10 +34,12 @@ class TestNewVisitor(LiveServerTestCase):
         # Escribe "Comprar papel higienico en la lista"
         inputbox.send_keys('Comprar papel higienico')
 
-        # Cuando pulsa enter la página se actualiza y pone:
+        # Cuando pulsa enter, el usuario es llevado a una nueva url
+        # y ahora la página se pone:
         # 1. Comprar papel higienico en la lista
         inputbox.send_keys(Keys.ENTER)
-
+        user_list_url = self.browser.current_url
+        self.assertRegex(user_list_url, '/list/.+')
         self.check_for_row_in_list_table('1. Comprar papel higienico')
 
         # Sigue apareciendo un texbox que invita a añadir otra tarea
@@ -49,12 +52,34 @@ class TestNewVisitor(LiveServerTestCase):
         self.check_for_row_in_list_table('1. Comprar papel higienico')
         self.check_for_row_in_list_table('2. Comprar champú')
 
-        # El usuario se pregunta si el sitio recordará su lista, entonces ve
-        # que el sitio genera una url unica para ella
+        # Ahora un nuevo usuario, Pepe, visita la página
 
+        ## Usamos una nueva sesión de usuario para asegurarnos de que no hay
+        ## información del usuario anterior.
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
 
-        # Visita esa url y comprueba que su to-do list está aun ahí
+        # Pepe visita el home, no hay rastro de la lista del usuario anterior.
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Comprar papel higienico', page_text)
+        self.assertNotIn('Comprar champú', page_text)
 
-        # Satisfecho abandona la página y se va a dormir
+        #Pepe empieza una nueva lista introduciendo un nuevo objeto
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Comprar Leche')
+        inputbox.send_keys(Keys.ENTER)
+
+        # Pepe obtine su url unica
+        pepe_list_url = self.browser.current_url
+        self.assertRegex(user_list_url, '/list/.+')
+        self.assertNotEqual(pepe_list_url, user_list_url)
+
+        # De nuevo no hay rastro de la lista del primer Usuario
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Comprar papel higienico', page_text)
+        self.assertIn('Comprar Leche', page_text)
+
+        # Satisfechos, se van a dormir
 
         self.fail('Fin de test')
