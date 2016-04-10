@@ -1,6 +1,6 @@
 # TDD-with-Python
 
-## Obey the Testing Goat!
+### Obey the Testing Goat!
 ![alt tag](http://www.obeythetestinggoat.com/static/images/kid_goat.png)
 
 - Python3
