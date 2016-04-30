@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-from django.test import LiveServerTestCase
+
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
 
-class TestNewVisitor(LiveServerTestCase):
+class TestNewVisitor(StaticLiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
@@ -92,7 +93,3 @@ class TestNewVisitor(LiveServerTestCase):
         page_text = self.browser.find_element_by_tag_name('body').text
         self.assertNotIn('Comprar papel higienico', page_text)
         self.assertIn('Comprar Leche', page_text)
-
-        # Satisfechos, se van a dormir
-
-        self.fail('Fin de test')
