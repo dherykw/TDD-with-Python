@@ -18,6 +18,19 @@ class TestNewVisitor(LiveServerTestCase):
         rows = table.find_elements_by_tag_name('tr')
         self.assertIn(row_text, [row.text for row in rows])
 
+    def test_layout_and_styling(self):
+        # El usuario entra al home
+        self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024, 768)
+
+        # Obseva que el inputbox está agradablente centrado
+        input_box = self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            input_box.location['x'] + input_box.size['width'] / 2,
+            512,
+            delta=5
+        )
+
     def test_start_a_new_todo_list(self):
         # El usuario ha odio de nuestra genial aplicación y entra
         self.browser.get(self.live_server_url)
@@ -65,7 +78,7 @@ class TestNewVisitor(LiveServerTestCase):
         self.assertNotIn('Comprar papel higienico', page_text)
         self.assertNotIn('Comprar champú', page_text)
 
-        #Pepe empieza una nueva lista introduciendo un nuevo objeto
+        # Pepe empieza una nueva lista introduciendo un nuevo objeto
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Comprar Leche')
         inputbox.send_keys(Keys.ENTER)
