@@ -1,53 +1,15 @@
 # -*- coding: utf-8 -*-
 import sys
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from unittest import skip
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from .base import FunctionalTest
 
 
-class TestNewVisitor(StaticLiveServerTestCase):
+class NewVisitorTest(FunctionalTest):
 
-    @classmethod
-    def setUpClass(cls):
-        for arg in sys.argv:
-            if 'liveserver' in arg:
-                cls.server_url = 'http://' + arg.split('=')[1]
-                return
-        super().setUpClass()
-        cls.server_url = cls.live_server_url
-
-    @classmethod
-    def tearDownClass(cls):
-        if cls.server_url == cls.live_server_url:
-            super().tearDownClass()
-
-    def setUp(self):
-        self.browser = webdriver.Firefox()
-        self.browser.implicitly_wait(3)
-
-    def tearDown(self):
-        self.browser.quit()
-
-    def check_for_row_in_list_table(self, row_text):
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn(row_text, [row.text for row in rows])
-
-    def test_layout_and_styling(self):
-        # El usuario entra al home
-        self.browser.get(self.server_url)
-        self.browser.set_window_size(1024, 768)
-
-        # Obseva que el inputbox está agradablente centrado
-        input_box = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual(
-            input_box.location['x'] + input_box.size['width'] / 2,
-            512,
-            delta=5
-        )
-
-    def test_start_a_new_todo_list(self):
+    def test_start_a_new_todo_list_and_retrieve_it_later(self):
         # El usuario ha odio de nuestra genial aplicación y entra
         self.browser.get(self.server_url)
 
