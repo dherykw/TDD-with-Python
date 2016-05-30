@@ -19,7 +19,7 @@ class NewVisitorTest(FunctionalTest):
         self.assertIn('To-Do', header_text)
 
         # Es invitado a insertar un to do en la lista
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         self.assertEqual(inputbox.get_attribute('placeholder'), 'Enter a to-do item')
 
         # Escribe "Comprar papel higienico en la lista"
@@ -35,7 +35,7 @@ class NewVisitorTest(FunctionalTest):
 
         # Sigue apareciendo un texbox que invita a añadir otra tarea
         # El usuario introduce otra tarea
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('Comprar champú')
         inputbox.send_keys(Keys.ENTER)
 
@@ -57,7 +57,7 @@ class NewVisitorTest(FunctionalTest):
         self.assertNotIn('Comprar champú', page_text)
 
         # Pepe empieza una nueva lista introduciendo un nuevo objeto
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('Comprar Leche')
         inputbox.send_keys(Keys.ENTER)
 
