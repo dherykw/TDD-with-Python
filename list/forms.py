@@ -1,5 +1,5 @@
 from django import forms
-from .views import Item
+from list.models import Item
 
 EMPTY_ITEM_ERROR = "You can't have any empty list item"
 
