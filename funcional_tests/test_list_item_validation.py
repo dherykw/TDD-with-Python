@@ -4,7 +4,6 @@ from .base import FunctionalTest
 
 
 class TestNewVisitor(FunctionalTest):
-
     def test_cannot_add_empty_list_items(self):
         # Pepe va a la home page y acidentalmente intenta introducir un item con texto
         # vacío.
@@ -31,3 +30,17 @@ class TestNewVisitor(FunctionalTest):
         self.get_item_input_box().send_keys('Make tea\n')
         self.check_for_row_in_list_table('1. Buy milk')
         self.check_for_row_in_list_table('2. Make tea')
+
+    def test_cannot_add_duplicate_items(self):
+        # Pepe va a la página de home y empieza una nueva lista
+        self.browser.get(self.server_url)
+        self.get_item_input_box().send_keys('Buy milk\n')
+        self.check_for_row_in_list_table('1. Buy milk')
+
+        # El accidentalmente intenta introducir un elemento duplicado
+        self.get_item_input_box().send_keys('Buy milk\n')
+
+        # El ve un util mensaje de error
+        self.check_for_row_in_list_table('1. Buy milk')
+        error = self.browser.find_element_by_css_selector(".has-error")
+        self.assertEqual(error.text, "You'he already got this in your list")
