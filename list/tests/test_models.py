@@ -41,6 +41,13 @@ class ItemModelTestCase(TestCase):
         item = Item(text='some text')
         self.assertEqual(str(item), 'some text')
 
+    def test_list_ordering(self):
+        list1 = List.objects.create()
+        item0 = Item.objects.create(list=list1, text='0')
+        item1 = Item.objects.create(list=list1, text='1')
+        item2 = Item.objects.create(list=list1, text='2')
+        self.assertEqual(list(Item.objects.all()), [item0, item1, item2])
+
 
 class ListModelTest(TestCase):
     def test_get_absolute_url(self):

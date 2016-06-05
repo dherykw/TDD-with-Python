@@ -2,13 +2,13 @@
 import sys
 from unittest import skip
 
+import time
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from .base import FunctionalTest
 
 
 class NewVisitorTest(FunctionalTest):
-
     def test_start_a_new_todo_list_and_retrieve_it_later(self):
         # El usuario ha odio de nuestra genial aplicación y entra
         self.browser.get(self.server_url)
