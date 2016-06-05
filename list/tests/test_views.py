@@ -3,7 +3,7 @@ from unittest import skip
 from django.test import TestCase
 from django.utils.html import escape
 
-from list.forms import ItemForm, EMPTY_ITEM_ERROR
+from list.forms import ItemForm, EMPTY_ITEM_ERROR, ExistingListItemForm
 from list.models import Item, List
 
 
@@ -73,7 +73,7 @@ class ListViewTest(TestCase):
     def test_displays_item_form(self):
         list_ = List.objects.create()
         response = self.client.get('/lists/%d/' % list_.id)
-        self.assertIsInstance(response.context['form'], ItemForm)
+        self.assertIsInstance(response.context['form'], ExistingListItemForm)
         self.assertContains(response, 'name="text')
 
     def post_invalid_input(self):
@@ -83,7 +83,7 @@ class ListViewTest(TestCase):
 
     def test_for_invalid_input_nothing_saved_to_db(self):
         self.post_invalid_input()
-        self.assertEqual(Item.objects.count(),0)
+        self.assertEqual(Item.objects.count(), 0)
 
     def test_for_invalid_input_renders_list_template(self):
         response = self.post_invalid_input()
@@ -92,13 +92,12 @@ class ListViewTest(TestCase):
 
     def test_for_invalid_input_passes_form_to_template(self):
         response = self.post_invalid_input()
-        self.assertIsInstance(response.context['form'], ItemForm)
+        self.assertIsInstance(response.context['form'], ExistingListItemForm)
 
     def test_for_invalid_input_shows_error_on_page(self):
         response = self.post_invalid_input()
         self.assertContains(response, escape(EMPTY_ITEM_ERROR))
 
-    @skip
     def test_duplicate_item_validation_errors_end_up_on_lists_page(self):
         list1 = List.objects.create()
         item = Item.objects.create(list=list1, text='textkey')
@@ -110,6 +109,7 @@ class ListViewTest(TestCase):
         self.assertContains(response, expected_error)
         self.assertTemplateUsed(response, 'list/list.html')
         self.assertEqual(Item.objects.count(), 1)
+
 
 class NewListTest(TestCase):
     def test_saving_a_POST_request(self):
@@ -129,7 +129,6 @@ class NewListTest(TestCase):
         )
         new_list = List.objects.first()
         self.assertRedirects(response, '/lists/%d/' % (new_list.id,))
-
 
     def test_invalid_list_items_arent_saved(self):
         self.client.post('/lists/new', data={'text': ''})
