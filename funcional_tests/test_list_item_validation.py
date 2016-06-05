@@ -43,4 +43,4 @@ class TestNewVisitor(FunctionalTest):
         # El ve un util mensaje de error
         self.check_for_row_in_list_table('1. Buy milk')
         error = self.browser.find_element_by_css_selector(".has-error")
-        self.assertEqual(error.text, "You'he already got this in your list")
+        self.assertEqual(error.text, "You've already got this in your list")
