@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import sys
+from pyvirtualdisplay import Display
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 
@@ -20,7 +21,9 @@ class FunctionalTest(StaticLiveServerTestCase):
             super().tearDownClass()
 
     def setUp(self):
-        self.browser = webdriver.Firefox()
+        display = Display(visible=0, size=(800, 600))
+        display.start()
+        self.browser = webdriver.Chrome()
         self.browser.implicitly_wait(3)
 
     def tearDown(self):

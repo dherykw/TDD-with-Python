@@ -48,7 +48,7 @@ class NewVisitorTest(FunctionalTest):
         ## Usamos una nueva sesión de usuario para asegurarnos de que no hay
         ## información del usuario anterior.
         self.browser.quit()
-        self.browser = webdriver.Firefox()
+        self.browser = webdriver.Chrome()
 
         # Pepe visita el home, no hay rastro de la lista del usuario anterior.
         self.browser.get(self.server_url)
