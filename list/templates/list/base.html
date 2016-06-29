@@ -41,5 +41,11 @@
 
 <script src="{% static 'vendor/jquery-1.12.4.min.js' %}"></script>
 <script src="{% static 'list.js' %}"></script>
+<script src="{% static 'accounts.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        Superlists.Accounts.initialize(navigator);
+    });
+</script>
 </body>
 </html>
