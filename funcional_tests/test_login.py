@@ -8,7 +8,7 @@ class LoginTest(FunctionalTest):
         # Pepe goes to the superlist site
         # and notices a "Sign in" link for the first time
         self.browser.get(self.server_url)
-        self.browser.find_element_by_id('login').click()
+        self.browser.find_element_by_id('id_login').click()
 
         # A persona login box appears
         self.switch_to_new_window('Mozilla Persona')
@@ -22,7 +22,7 @@ class LoginTest(FunctionalTest):
         self.switch_to_new_window('To-Do')
 
         # Pepe can see that he is logged in
-        self.wait_for_element_with_id('logout')
+        self.wait_for_element_with_id('id_logout')
         navabar = self.browser.find_element_by_css_selector(".navbar")
         self.assertIn('pepe@mockmyid.com', navabar.text)
 
